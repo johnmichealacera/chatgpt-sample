@@ -41,7 +41,7 @@ export default {
         isLoading.value = false;
         textareaData.value = response?.data?.choices?.[0]?.text;
       } else {
-        alert('Please enter your inquiry in the text field!');
+        alert('Please enter conversation in the text field!');
       }
     }
   

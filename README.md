@@ -1,13 +1,21 @@
 # **Happy Chat app with chatgpt**
 ## This is a happy chat app with integration of chatgpt
 
-### **Features**
+## **Features**
 - Respond to conversation in a very friendly manner and might offer some advice and comfort
 
-# Installation
+## Installation
 1. Clone the repository: `git clone https://github.com/johnmichealacera/chatgpt-sample.git`
 2. Navigate to the project directory: `cd chatgpt-app`
 3. Install dependencies: `npm install`
+
+### Environment Variables
+The application requires the following environment variable to be set:
+
+`VUE_APP_CHATGPT_API_KEY`: : Your personal or companies chatgpt api key.
+
+Create a `.env` file in the root directory of the project with the value for:
+`VUE_APP_CHATGPT_API_KEY=`
 
 ## Usage
 1. Start the development server: `npm run serve`

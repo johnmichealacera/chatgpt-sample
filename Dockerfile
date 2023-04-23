@@ -26,6 +26,6 @@ EXPOSE 8080
 # Set environment-specific default command
 CMD if [ "$NODE_ENV" = "production" ]; \
     then npm run build && npx serve dist -p 8080; \
-    else npm run serve; \
+    else npm run serve -- --port 8080; \
     fi
 

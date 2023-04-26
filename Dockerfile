@@ -7,7 +7,7 @@ RUN npm install -g http-server
 WORKDIR /app
 
 # Set environment variables
-ENV VUE_APP_CHATGPT_API_KEY=''
+ENV VUE_APP_CHATGPT_API_KEY='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'
 
 # copy both 'package.json' and 'package-lock.json' (if available)
 COPY package*.json ./

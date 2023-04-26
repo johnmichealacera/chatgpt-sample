@@ -3,7 +3,7 @@ services:
     image: chatgptapp
     envVars:
       - key: VUE_APP_CHATGPT_API_KEY
-        value: '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'
+        value: ''
       - key: NODE_ENV
         value: production
     httpPort: 3000

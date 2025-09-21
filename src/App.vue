@@ -12,7 +12,7 @@
 
 <script>
 import { ref } from 'vue';
-const { Configuration, OpenAIApi } = require("openai");
+
 export default {
   name: 'App',
   components: {
@@ -21,30 +21,64 @@ export default {
     const question = ref('');
     const textareaData = ref('');
     const isLoading = ref(false);
-    const configuration = new Configuration({
-      apiKey: process.env.VUE_APP_CHATGPT_API_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
+    
+    // Hugging Face configuration
+    const HF_API_URL = 'https://router.huggingface.co/v1';
+    const HF_API_TOKEN = process.env.VUE_APP_HF_API_TOKEN; // Your token
+
+    console.log('HF_API_TOKEN', HF_API_TOKEN);
+    
+    
     const loadOpenAi = async () => {
       if (question?.value) {
         isLoading.value = true;
-        const chatgptPrompt = process.env.VUE_APP_CHATGPT_PROMPT;
-        const response = await openai.createCompletion({
-          model: "text-davinci-003",
-          prompt: `${chatgptPrompt} ${question?.value}`,
-          temperature: 0.7,
-          max_tokens: 256,
-          top_p: 1,
-          frequency_penalty: 0,
-          presence_penalty: 0,
-        });
+        
+        try {
+          // Call Hugging Face Router API directly from frontend
+          const response = await fetch(`${HF_API_URL}/chat/completions`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${HF_API_TOKEN}`
+            },
+            body: JSON.stringify({
+              model: "Qwen/Qwen3-Next-80B-A3B-Instruct",
+              messages: [
+                {
+                  role: "system",
+                  content: "You are a friendly and supportive AI companion. Respond in a warm, helpful, and encouraging way. Keep responses conversational and positive."
+                },
+                {
+                  role: "user", 
+                  content: question.value
+                }
+              ],
+              max_tokens: 200,
+              temperature: 0.7
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.choices && data.choices.length > 0) {
+            textareaData.value = data.choices[0].message.content;
+          } else if (data.error) {
+            textareaData.value = `Error: ${data.error.message || data.error}`;
+          } else {
+            textareaData.value = "I'm here to chat! How can I help you today?";
+          }
+          
+        } catch (error) {
+          console.error('Error calling AI:', error);
+          textareaData.value = `Sorry, I encountered an error: ${error.message}. Please try again.`;
+        }
+        
         isLoading.value = false;
-        textareaData.value = response?.data?.choices?.[0]?.text;
+        question.value = ''; // Clear the input after sending
       } else {
         alert('Please enter conversation in the text field!');
       }
     }
-  
 
     return {
       textareaData,
